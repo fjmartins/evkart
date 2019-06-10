@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">EV Kart</string>
+    <string name="app_name">EVカート ログ</string>
+    <string name="devices">USB Devices</string>
 </resources>
