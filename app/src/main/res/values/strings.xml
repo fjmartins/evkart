@@ -2,7 +2,7 @@
     <string name="app_name">EVカート ログ</string>
     <string name="devices">USB Devices</string>
     <string name="baud_rate">Baud rate</string>
-    <string name="refresh_devices">Refresh Devices</string>
+    <string name="refresh_devices">Refresh devices</string>
     <string name="no_devices">No USB devices found.</string>
     <string name="no_driver">No driver.</string>
 </resources>
