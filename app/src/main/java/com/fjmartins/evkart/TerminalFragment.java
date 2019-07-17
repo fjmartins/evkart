@@ -30,7 +30,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fjmartins.evkart.model.LogEntry;
+import com.fjmartins.evkart.model.Log;
 import com.fjmartins.evkart.model.Kart;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
@@ -274,8 +274,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     }
 
     private void receive(byte[] data) {
-//        kart.addLog();
-        receiveText.append(LogEntry.fromString(new String(data)).toString());
+        Log log = Log.fromString(new String(data));
+        kart.addLog(log);
+
+        receiveText.append(log.toString());
     }
 
     private void status(String str) {

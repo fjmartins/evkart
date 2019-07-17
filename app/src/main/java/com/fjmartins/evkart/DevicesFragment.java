@@ -2,7 +2,6 @@ package com.fjmartins.evkart;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fjmartins.evkart.model.ListItem;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
@@ -26,22 +26,10 @@ import java.util.Locale;
 
 public class DevicesFragment extends ListFragment {
 
-    class ListItem {
-        UsbDevice device;
-        int port;
-        UsbSerialDriver driver;
-
-        ListItem(UsbDevice device, int port, UsbSerialDriver driver) {
-            this.device = device;
-            this.port = port;
-            this.driver = driver;
-        }
-    }
-
     private ArrayList<ListItem> listItems = new ArrayList<>();
     private ArrayAdapter<ListItem> listAdapter;
 
-    private int baudRate = 19200;
+    private int defaultBaudRate = 38400;
 
     public DevicesFragment() {
     }
@@ -59,7 +47,7 @@ public class DevicesFragment extends ListFragment {
                 TextView text1 = view.findViewById(R.id.text1);
                 TextView text2 = view.findViewById(R.id.text2);
                 if(item.driver == null)
-                    text1.setText("<no driver>");
+                    text1.setText(getResources().getString(R.string.no_driver));
                 else if(item.driver.getPorts().size() == 1)
                     text1.setText(item.driver.getClass().getSimpleName().replace("SerialDriver",""));
                 else
@@ -76,7 +64,7 @@ public class DevicesFragment extends ListFragment {
         setListAdapter(null);
         View header = getActivity().getLayoutInflater().inflate(R.layout.device_list_header, null, false);
         getListView().addHeaderView(header, null, false);
-        setEmptyText("<no USB devices found>");
+        setEmptyText(getResources().getString(R.string.no_devices));
         ((TextView) getListView().getEmptyView()).setTextSize(18);
         setListAdapter(listAdapter);
     }
@@ -100,14 +88,12 @@ public class DevicesFragment extends ListFragment {
             return true;
         } else if (id ==R.id.baud_rate) {
             final String[] baudRates = getResources().getStringArray(R.array.baud_rates);
-            int pos = java.util.Arrays.asList(baudRates).indexOf(String.valueOf(baudRate));
+            int pos = java.util.Arrays.asList(baudRates).indexOf(String.valueOf(defaultBaudRate));
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Baud rate");
-            builder.setSingleChoiceItems(baudRates, pos, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                    baudRate = Integer.valueOf(baudRates[item]);
-                    dialog.dismiss();
-                }
+            builder.setTitle(getResources().getString(R.string.baud_rate));
+            builder.setSingleChoiceItems(baudRates, pos, (dialog, item1) -> {
+                defaultBaudRate = Integer.valueOf(baudRates[item1]);
+                dialog.dismiss();
             });
             builder.create().show();
             return true;
@@ -145,7 +131,7 @@ public class DevicesFragment extends ListFragment {
             Bundle args = new Bundle();
             args.putInt("device", item.device.getDeviceId());
             args.putInt("port", item.port);
-            args.putInt("baud", baudRate);
+            args.putInt("baud", defaultBaudRate);
             Fragment fragment = new TerminalFragment();
             fragment.setArguments(args);
             getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();

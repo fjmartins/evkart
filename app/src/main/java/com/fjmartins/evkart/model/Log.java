@@ -1,10 +1,9 @@
 package com.fjmartins.evkart.model;
 
 import com.fjmartins.evkart.Constants;
-
 import java.util.Calendar;
 
-public class LogEntry {
+public class Log {
 
     private int rpm;
     private double onDuty;
@@ -13,21 +12,21 @@ public class LogEntry {
     private double batteryAmp;
     private String timeStamp;
 
-    LogEntry() {
+    Log() {
         this.timeStamp = Calendar.getInstance().getTime().toString();
     }
 
-    public static LogEntry fromString(String dataString) {
-        LogEntry logEntry = new LogEntry();
+    public static Log fromString(String dataString) {
+        Log log = new Log();
 
         for (String attribute : dataString.split(Constants.DATA_DIVIDER)) {
             String[] keyAndValue = attribute.split(Constants.KEY_VALUE_DIVIDER);
             if (keyAndValue.length > 1) {
-                logEntry.setAttribute(keyAndValue[0], keyAndValue[1]);
+                log.setAttribute(keyAndValue[0], keyAndValue[1]);
             }
         }
 
-        return logEntry;
+        return log;
     }
 
     private void setAttribute(String key, String value) {
