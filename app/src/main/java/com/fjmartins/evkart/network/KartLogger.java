@@ -1,6 +1,7 @@
 package com.fjmartins.evkart.network;
 
 import com.fjmartins.evkart.model.KartLoggerResponse;
+import com.fjmartins.evkart.model.Log;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -32,8 +33,8 @@ public class KartLogger implements KartLoggerAPI {
     }
 
     @Override
-    public Observable<KartLoggerResponse> insertDrivingLog(String query, String apiKey) {
-        return api.insertDrivingLog(query.replace(" ", "+"), apiKey)
+    public Observable<KartLoggerResponse> insertDrivingLog(Log log) {
+        return api.insertDrivingLog(log)
                 .subscribeOn(Schedulers.io());
     }
 }

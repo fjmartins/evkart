@@ -1,16 +1,34 @@
 package com.fjmartins.evkart.model;
 
 import com.fjmartins.evkart.Constants;
+import com.squareup.moshi.Json;
+
 import java.util.Calendar;
 
+/* {
+        "type": "value",
+        "sec": "value",
+        "volt": "value",
+        "ampere": "value",
+        "rpm": "value",
+        "duty": "value",
+        "thv": "value",
+        "kmph": "value"
+    }'*/
 public class Log {
 
-    private int rpm;
-    private double onDuty;
-    private String throttleVoltage;
-    private double batteryVoltage;
-    private double batteryAmp;
-    private String timeStamp;
+    @Json(name = "rpm")
+    public int rpm;
+    @Json(name = "duty")
+    public double onDuty;
+    @Json(name = "thv")
+    public String throttleVoltage;
+    @Json(name = "volt")
+    public double batteryVoltage;
+    @Json(name = "ampere")
+    public double batteryAmp;
+    @Json(name = "sec")
+    public String timeStamp;
 
     Log() {
         this.timeStamp = Calendar.getInstance().getTime().toString();
@@ -59,6 +77,5 @@ public class Log {
                 + "\nBattery: " + batteryVoltage
                 + "\nBattery Amp: " + batteryAmp
                 + "\nTime: " + timeStamp + "\n";
-
     }
 }

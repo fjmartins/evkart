@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 import com.fjmartins.evkart.model.Log;
 import com.fjmartins.evkart.model.Kart;
+import com.fjmartins.evkart.network.KartLogger;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
@@ -278,6 +280,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         kart.addLog(log);
 
         receiveText.append(log.toString());
+
+        new LoggerTask().execute(log);
     }
 
     private void status(String str) {
@@ -310,6 +314,15 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     public void onSerialIoError(Exception e) {
         status("connection lost: " + e.getMessage());
         disconnect();
+    }
+
+    private class LoggerTask extends AsyncTask<Log, Void, Void> {
+        @Override
+        protected Void doInBackground(Log... logs) {
+            KartLogger.getInstance().insertDrivingLog(logs[0]);
+
+            return null;
+        }
     }
 
 }
