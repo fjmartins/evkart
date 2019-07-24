@@ -38,6 +38,8 @@ import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
+import java.util.Objects;
+
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
     private enum Connected { False, Pending, True }
@@ -60,7 +62,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(intent.getAction().equals(INTENT_ACTION_GRANT_USB)) {
+                if(Objects.equals(intent.getAction(), INTENT_ACTION_GRANT_USB)) {
                     Boolean granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
                     connect(granted);
                 }
@@ -76,9 +78,13 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-        deviceId = getArguments().getInt("device");
-        portNum = getArguments().getInt("port");
-        baudRate = getArguments().getInt("baud");
+        Bundle args = getArguments();
+
+        if(args != null) {
+            deviceId = args.getInt("device");
+            portNum = args.getInt("port");
+            baudRate = args.getInt("baud");
+        }
 
         kart = new Kart("必勝カート");
     }
@@ -87,7 +93,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     public void onDestroy() {
         if (connected != Connected.False)
             disconnect();
-        getActivity().stopService(new Intent(getActivity(), SerialService.class));
+        Objects.requireNonNull(getActivity()).stopService(new Intent(getActivity(), SerialService.class));
         super.onDestroy();
     }
 
@@ -97,12 +103,12 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         if(service != null)
             service.attach(this);
         else
-            getActivity().startService(new Intent(getActivity(), SerialService.class)); // prevents service destroy on unbind from recreated activity caused by orientation change
+            Objects.requireNonNull(getActivity()).startService(new Intent(getActivity(), SerialService.class)); // prevents service destroy on unbind from recreated activity caused by orientation change
     }
 
     @Override
     public void onStop() {
-        if(service != null && !getActivity().isChangingConfigurations())
+        if(service != null && !Objects.requireNonNull(getActivity()).isChangingConfigurations())
             service.detach();
         super.onStop();
     }
@@ -111,19 +117,19 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        getActivity().bindService(new Intent(getActivity(), SerialService.class), this, Context.BIND_AUTO_CREATE);
+        Objects.requireNonNull(getActivity()).bindService(new Intent(getActivity(), SerialService.class), this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onDetach() {
-        try { getActivity().unbindService(this); } catch(Exception ignored) {}
+        try { Objects.requireNonNull(getActivity()).unbindService(this); } catch(Exception ignored) {}
         super.onDetach();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB));
+        Objects.requireNonNull(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB));
         if(initialStart && service !=null) {
             initialStart = false;
             getActivity().runOnUiThread(this::connect);
@@ -132,7 +138,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public void onPause() {
-        getActivity().unregisterReceiver(broadcastReceiver);
+        Objects.requireNonNull(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onPause();
     }
 
@@ -141,7 +147,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         service = ((SerialService.SerialBinder) binder).getService();
         if(initialStart && isResumed()) {
             initialStart = false;
-            getActivity().runOnUiThread(this::connect);
+            Objects.requireNonNull(getActivity()).runOnUiThread(this::connect);
         }
     }
 
@@ -202,7 +208,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     private void connect(Boolean permissionGranted) {
         UsbDevice device = null;
-        UsbManager usbManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
+        UsbManager usbManager = (UsbManager) Objects.requireNonNull(getActivity()).getSystemService(Context.USB_SERVICE);
         for(UsbDevice v : usbManager.getDeviceList().values())
             if(v.getDeviceId() == deviceId)
                 device = v;
@@ -316,11 +322,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         disconnect();
     }
 
-    private class LoggerTask extends AsyncTask<Log, Void, Void> {
+    private static class LoggerTask extends AsyncTask<Log, Void, Void> {
         @Override
         protected Void doInBackground(Log... logs) {
             KartLogger.getInstance().insertDrivingLog(logs[0]);
-
             return null;
         }
     }

@@ -12,8 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class KartLogger implements KartLoggerAPI {
 
-    public static final String URL = "http://52.194.39.228/EvKart/";
-
+    private static final String URL = "http://52.194.39.228/EvKart/";
     private static KartLogger logger;
     private KartLoggerAPI api;
 
