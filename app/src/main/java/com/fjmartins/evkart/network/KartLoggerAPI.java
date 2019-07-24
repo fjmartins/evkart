@@ -1,7 +1,7 @@
 package com.fjmartins.evkart.network;
 
 import com.fjmartins.evkart.model.KartLoggerResponse;
-import com.fjmartins.evkart.model.Log;
+import com.fjmartins.evkart.model.LogRequest;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -11,6 +11,6 @@ public interface KartLoggerAPI {
 
     @POST("InsertDrivingLog")
     Observable<KartLoggerResponse> insertDrivingLog(
-            @Body Log log
+            @Body LogRequest log
     );
 }

@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.fjmartins.evkart.model.Log;
 import com.fjmartins.evkart.model.Kart;
+import com.fjmartins.evkart.model.LogRequest;
 import com.fjmartins.evkart.network.KartLogger;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
@@ -325,7 +326,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private static class LoggerTask extends AsyncTask<Log, Void, Void> {
         @Override
         protected Void doInBackground(Log... logs) {
-            KartLogger.getInstance().insertDrivingLog(logs[0]);
+            KartLogger.getInstance().insertDrivingLog(new LogRequest(logs[0]));
             return null;
         }
     }
