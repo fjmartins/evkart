@@ -5,16 +5,6 @@ import com.squareup.moshi.Json;
 
 import java.util.Calendar;
 
-/* {
-        "type": "value",
-        "sec": "value",
-        "volt": "value",
-        "ampere": "value",
-        "rpm": "value",
-        "duty": "value",
-        "thv": "value",
-        "kmph": "value"
-    }'*/
 public class Log {
 
     @Json(name = "rpm")
@@ -30,7 +20,7 @@ public class Log {
     @Json(name = "sec")
     public String timeStamp;
 
-    Log() {
+    public Log() {
         this.timeStamp = Calendar.getInstance().getTime().toString();
     }
 

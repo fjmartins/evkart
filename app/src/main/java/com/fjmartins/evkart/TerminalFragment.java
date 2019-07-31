@@ -285,9 +285,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private void receive(byte[] data) {
         Log log = Log.fromString(new String(data));
         kart.addLog(log);
-
         receiveText.append(log.toString());
-
         new LoggerTask().execute(log);
     }
 
@@ -326,7 +324,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private static class LoggerTask extends AsyncTask<Log, Void, Void> {
         @Override
         protected Void doInBackground(Log... logs) {
-            KartLogger.getInstance().insertDrivingLog(new LogRequest(logs[0]));
+            KartLogger.getInstance().insertDrivingLog(new LogRequest(logs[0])).subscribe();
             return null;
         }
     }
