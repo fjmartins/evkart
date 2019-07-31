@@ -11,7 +11,7 @@ public class Constants {
     static final int NOTIFY_MANAGER_START_FOREGROUND_SERVICE = 1001;
 
     // kart data values
-    public static final String DATA_DIVIDER = ", ";
+    public static final String DATA_DIVIDER = ",";
     public static final String KEY_VALUE_DIVIDER = "=";
 
     private Constants() {}

@@ -35,6 +35,7 @@ import com.fjmartins.evkart.model.Log;
 import com.fjmartins.evkart.model.Kart;
 import com.fjmartins.evkart.model.LogRequest;
 import com.fjmartins.evkart.network.KartLogger;
+import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
@@ -283,10 +284,18 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     }
 
     private void receive(byte[] data) {
-        Log log = Log.fromString(new String(data));
-        kart.addLog(log);
-        receiveText.append(log.toString());
-        new LoggerTask().execute(log);
+        String dataString = new String(data);
+
+        if (data != null && !dataString.isEmpty()) {
+            if (dataString.contains("RPM")) {
+                Log log = Log.fromString(dataString);
+                String logString = new Gson().toJson(log);
+                receiveText.append(logString);
+                //        new LoggerTask().execute(log);
+            } else {
+                receiveText.append(dataString);
+            }
+        }
     }
 
     private void status(String str) {

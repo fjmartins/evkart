@@ -12,7 +12,7 @@ public class Log {
     @Json(name = "duty")
     public double onDuty;
     @Json(name = "thv")
-    public String throttleVoltage;
+    public double throttleVoltage;
     @Json(name = "volt")
     public double batteryVoltage;
     @Json(name = "ampere")
@@ -28,9 +28,9 @@ public class Log {
         Log log = new Log();
 
         for (String attribute : dataString.split(Constants.DATA_DIVIDER)) {
-            String[] keyAndValue = attribute.split(Constants.KEY_VALUE_DIVIDER);
+            String[] keyAndValue = attribute.trim().split(Constants.KEY_VALUE_DIVIDER);
             if (keyAndValue.length > 1) {
-                log.setAttribute(keyAndValue[0], keyAndValue[1]);
+                log.setAttribute(keyAndValue[0].trim(), keyAndValue[1].trim());
             }
         }
 
@@ -38,34 +38,26 @@ public class Log {
     }
 
     private void setAttribute(String key, String value) {
+        if (value.isEmpty()) return;
+
         switch (key) {
             case "RPM(rpm)":
-                rpm = Integer.parseInt(value);
+                this.rpm = Integer.parseInt(value);
                 break;
             case "On Duty(%)":
-                onDuty = Double.parseDouble(value);
+                this.onDuty = Double.parseDouble(value);
                 break;
             case "ThV(V)":
-                throttleVoltage = value;
+                this.throttleVoltage = Double.parseDouble(value);
                 break;
             case "BV(V)":
-                batteryVoltage = Double.parseDouble(value);
+                this.batteryVoltage = Double.parseDouble(value);
                 break;
             case "BI(A)":
-                batteryAmp = Double.parseDouble(value);
+                this.batteryAmp = Double.parseDouble(value);
                 break;
             default:
                 break;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "\nRPM: " + rpm
-                + "\nOn Duty: " + onDuty
-                + "\nThrottle: " + throttleVoltage
-                + "\nBattery: " + batteryVoltage
-                + "\nBattery Amp: " + batteryAmp
-                + "\nTime: " + timeStamp + "\n";
     }
 }
