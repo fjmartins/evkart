@@ -31,16 +31,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fjmartins.evkart.model.KartLoggerResponse;
 import com.fjmartins.evkart.model.Log;
 import com.fjmartins.evkart.model.Kart;
-import com.fjmartins.evkart.model.LogRequest;
 import com.fjmartins.evkart.network.KartLogger;
+import com.fjmartins.evkart.network.LoggerTask;
 import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
+import java.util.Arrays;
 import java.util.Objects;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
@@ -58,7 +66,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private boolean initialStart = true;
     private Connected connected = Connected.False;
     private BroadcastReceiver broadcastReceiver;
-    private Kart kart = null;
 
     public TerminalFragment() {
         broadcastReceiver = new BroadcastReceiver() {
@@ -87,8 +94,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             portNum = args.getInt("port");
             baudRate = args.getInt("baud");
         }
-
-        kart = new Kart("必勝カート");
     }
 
     @Override
@@ -291,7 +296,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 Log log = Log.fromString(dataString);
                 String logString = new Gson().toJson(log);
                 receiveText.append(logString);
-                //        new LoggerTask().execute(log);
+
+                new LoggerTask().execute(log);
             } else {
                 receiveText.append(dataString);
             }
@@ -328,14 +334,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     public void onSerialIoError(Exception e) {
         status("connection lost: " + e.getMessage());
         disconnect();
-    }
-
-    private static class LoggerTask extends AsyncTask<Log, Void, Void> {
-        @Override
-        protected Void doInBackground(Log... logs) {
-            KartLogger.getInstance().insertDrivingLog(new LogRequest(logs[0])).subscribe();
-            return null;
-        }
     }
 
 }

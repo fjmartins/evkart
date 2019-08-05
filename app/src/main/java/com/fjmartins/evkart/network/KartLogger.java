@@ -1,18 +1,18 @@
 package com.fjmartins.evkart.network;
 
 import com.fjmartins.evkart.model.KartLoggerResponse;
-import com.fjmartins.evkart.model.LogRequest;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class KartLogger implements KartLoggerAPI {
 
-    private static final String URL = "http://52.194.39.228/EvKart/";
+    private static final String URL = "https://ptcs.ev-kart-gogo.com/";
     private static KartLogger logger;
     private KartLoggerAPI api;
 
@@ -32,8 +32,8 @@ public class KartLogger implements KartLoggerAPI {
     }
 
     @Override
-    public Observable<KartLoggerResponse> insertDrivingLog(LogRequest log) {
-        return api.insertDrivingLog(log)
+    public Observable<KartLoggerResponse> insertDrivingLog(RequestBody body) {
+        return api.insertDrivingLog(body)
                 .subscribeOn(Schedulers.io());
     }
 }
