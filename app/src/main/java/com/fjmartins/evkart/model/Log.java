@@ -8,6 +8,8 @@ import java.util.Calendar;
 
 public class Log {
 
+    public static int count;
+
     @SerializedName("rpm")
     public int rpm;
     @SerializedName("duty")
@@ -19,14 +21,16 @@ public class Log {
     @SerializedName("ampere")
     public double batteryAmp;
     @SerializedName("sec")
-    public String timeStamp;
+    public int timeStamp;
     @SerializedName("kmph")
-    public double kmph;
+    public int kmph;
     @SerializedName("type")
     public int type = 1;
 
     public Log() {
-        this.timeStamp = Calendar.getInstance().getTime().toString();
+        count++;
+
+        this.timeStamp = count;
     }
 
     public static Log fromString(String dataString) {
@@ -48,7 +52,7 @@ public class Log {
         switch (key) {
             case "RPM(rpm)":
                 rpm = Integer.parseInt(value);
-                kmph = ((rpm / 4.375) * 3.14 * 60 * 0.4064) / 1000;
+                kmph = (int)((rpm / 4.375) * 3.14 * 60 * 0.4064) / 1000;
                 break;
             case "On Duty(%)":
                 onDuty = Double.parseDouble(value);
