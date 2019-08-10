@@ -5,10 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.fjmartins.evkart.model.Log;
-import com.fjmartins.evkart.network.LoggerTask;
-
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
+
+    private static int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
