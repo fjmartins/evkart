@@ -21,7 +21,7 @@ public class Log {
     @SerializedName("sec")
     public String timeStamp;
     @SerializedName("kmph")
-    public int kmph;
+    public double kmph;
     @SerializedName("type")
     public int type = 1;
 
@@ -47,19 +47,20 @@ public class Log {
 
         switch (key) {
             case "RPM(rpm)":
-                this.rpm = Integer.parseInt(value);
+                rpm = Integer.parseInt(value);
+                kmph = ((rpm / 4.375) * 3.14 * 60 * 0.4064) / 1000;
                 break;
             case "On Duty(%)":
-                this.onDuty = Double.parseDouble(value);
+                onDuty = Double.parseDouble(value);
                 break;
             case "ThV(V)":
-                this.throttleVoltage = Double.parseDouble(value);
+                throttleVoltage = Double.parseDouble(value);
                 break;
             case "BV(V)":
-                this.batteryVoltage = Double.parseDouble(value);
+                batteryVoltage = Double.parseDouble(value);
                 break;
             case "BI(A)":
-                this.batteryAmp = Double.parseDouble(value);
+                batteryAmp = Double.parseDouble(value);
                 break;
             default:
                 break;
