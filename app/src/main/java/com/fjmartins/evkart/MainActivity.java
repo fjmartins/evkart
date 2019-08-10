@@ -21,15 +21,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             getSupportFragmentManager().beginTransaction().add(R.id.fragment, new DevicesFragment(), "devices").commit();
         else
             onBackStackChanged();
-
-        Log log = new Log();
-        log.batteryAmp = -1.9;
-        log.batteryVoltage = 434.4;
-        log.onDuty = 2.1;
-        log.rpm = 123;
-        log.throttleVoltage = 12.2;
-
-        new LoggerTask().execute(log);
     }
 
     @Override

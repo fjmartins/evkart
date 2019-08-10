@@ -1,24 +1,29 @@
 package com.fjmartins.evkart.model;
 
 import com.fjmartins.evkart.Constants;
+import com.google.gson.annotations.SerializedName;
 import com.squareup.moshi.Json;
 
 import java.util.Calendar;
 
 public class Log {
 
-    @Json(name = "rpm")
+    @SerializedName("rpm")
     public int rpm;
-    @Json(name = "duty")
+    @SerializedName("duty")
     public double onDuty;
-    @Json(name = "thv")
+    @SerializedName("thv")
     public double throttleVoltage;
-    @Json(name = "volt")
+    @SerializedName("volt")
     public double batteryVoltage;
-    @Json(name = "ampere")
+    @SerializedName("ampere")
     public double batteryAmp;
-    @Json(name = "sec")
+    @SerializedName("sec")
     public String timeStamp;
+    @SerializedName("kmph")
+    public int kmph;
+    @SerializedName("type")
+    public int type = 1;
 
     public Log() {
         this.timeStamp = Calendar.getInstance().getTime().toString();
