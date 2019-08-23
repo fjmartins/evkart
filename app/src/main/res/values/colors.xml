@@ -7,4 +7,5 @@
     <color name="colorReceiveText">#00FF00</color>
     <color name="colorSendText">#82CAFF</color>
     <color name="colorStatusText">#f21414</color>
+    <color name="colorWhite">#ffffff</color>
 </resources>

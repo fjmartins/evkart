@@ -37,6 +37,7 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
@@ -55,7 +56,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private boolean initialStart = true;
     private Connected connected = Connected.False;
     private BroadcastReceiver broadcastReceiver;
-
+    private String startTimeString = "";
     private ArrayList<Log> logs = new ArrayList<>();
 
     public TerminalFragment() {
@@ -79,6 +80,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         setHasOptionsMenu(true);
         setRetainInstance(true);
         Bundle args = getArguments();
+
+        startTimeString = Calendar.getInstance().getTime().toString();
 
         if(args != null) {
             deviceId = args.getInt("device");
@@ -180,7 +183,25 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         if (id == R.id.clear) {
             receiveText.setText("");
             return true;
-        } else if (id ==R.id.newline) {
+        } else if (id == R.id.save) {
+            StringBuilder text = new StringBuilder();
+
+            if (logs.size() > 0) {
+                for(Log log : logs) {
+                    text.append(log.toString()).append("\n");
+                }
+            }
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/html");
+            intent.putExtra(Intent.EXTRA_EMAIL, "fabiomsjunior@gmail.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "EV Kart Logs " + startTimeString);
+            intent.putExtra(Intent.EXTRA_TEXT, text.toString());
+
+            startActivity(Intent.createChooser(intent, "Send Email"));
+
+            return true;
+        } else if (id == R.id.newline) {
             String[] newlineNames = getResources().getStringArray(R.array.newline_names);
             String[] newlineValues = getResources().getStringArray(R.array.newline_values);
             int pos = java.util.Arrays.asList(newlineValues).indexOf(newline);

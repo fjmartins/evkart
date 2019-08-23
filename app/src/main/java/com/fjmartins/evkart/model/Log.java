@@ -52,7 +52,7 @@ public class Log {
         switch (key) {
             case "RPM(rpm)":
                 rpm = Integer.parseInt(value);
-                kmph = (int)((rpm / 4.375) * 3.14 * 60 * 0.4064) / 1000;
+                kmph = (int) ((rpm / 4.375) * 3.14 * 60 * 0.4064) / 1000;
                 break;
             case "On Duty(%)":
                 onDuty = Double.parseDouble(value);
@@ -69,5 +69,16 @@ public class Log {
             default:
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Sec: " + timeStamp
+                + ", RPM: " + rpm
+                + ", Km/h: " + kmph
+                + ", On Duty(%)" + onDuty
+                + ", ThV(V): " + throttleVoltage
+                + ", BV(V): " + batteryVoltage
+                + ", BI(A): " + batteryAmp;
     }
 }
