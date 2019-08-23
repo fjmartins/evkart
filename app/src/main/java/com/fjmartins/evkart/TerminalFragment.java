@@ -182,6 +182,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         int id = item.getItemId();
         if (id == R.id.clear) {
             receiveText.setText("");
+            logs = new ArrayList<>();
+
             return true;
         } else if (id == R.id.save) {
             StringBuilder text = new StringBuilder();
