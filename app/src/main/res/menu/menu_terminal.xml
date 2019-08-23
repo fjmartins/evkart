@@ -3,9 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/save"
-        android:icon="@drawable/icons8_save_24"
-        android:iconTint="@color/colorWhite"
-        android:title="Clear"
+        android:icon="@drawable/icons8_save_48"
+        android:title="Save"
         app:showAsAction="always" />
 
     <item

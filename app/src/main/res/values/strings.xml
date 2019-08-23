@@ -5,4 +5,5 @@
     <string name="refresh_devices">Refresh devices</string>
     <string name="no_devices">No USB devices found.</string>
     <string name="no_driver">No driver.</string>
+    <string name="no_logs">保存できるログがありません。</string>
 </resources>

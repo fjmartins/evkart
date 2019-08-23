@@ -192,15 +192,18 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 for(Log log : logs) {
                     text.append(log.toString()).append("\n");
                 }
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/html");
+                intent.putExtra(Intent.EXTRA_EMAIL, "fabiomsjunior@gmail.com");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "EV Kart Logs " + startTimeString);
+                intent.putExtra(Intent.EXTRA_TEXT, text.toString());
+
+                startActivity(Intent.createChooser(intent, "Send Email"));
+            } else {
+                Toast.makeText(getContext(), getString(R.string.no_logs),
+                        Toast.LENGTH_SHORT).show();
             }
-
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/html");
-            intent.putExtra(Intent.EXTRA_EMAIL, "fabiomsjunior@gmail.com");
-            intent.putExtra(Intent.EXTRA_SUBJECT, "EV Kart Logs " + startTimeString);
-            intent.putExtra(Intent.EXTRA_TEXT, text.toString());
-
-            startActivity(Intent.createChooser(intent, "Send Email"));
 
             return true;
         } else if (id == R.id.newline) {
