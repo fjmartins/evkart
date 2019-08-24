@@ -1,5 +1,7 @@
 package com.fjmartins.evkart.model;
 
+import android.text.format.DateFormat;
+
 import com.fjmartins.evkart.Constants;
 import com.google.gson.annotations.SerializedName;
 import com.squareup.moshi.Json;
@@ -7,8 +9,6 @@ import com.squareup.moshi.Json;
 import java.util.Calendar;
 
 public class Log {
-
-    public static int count;
 
     @SerializedName("rpm")
     public int rpm;
@@ -26,11 +26,19 @@ public class Log {
     public int kmph;
     @SerializedName("type")
     public int type = 1;
+    @SerializedName("date")
+    public String date;
+    @SerializedName("lat")
+    public double lat;
+    @SerializedName("lng")
+    public double lng;
 
     public Log() {
-        count++;
+        date = DateFormat.format("yyyy-MM-dd hh:mm:ss", Calendar.getInstance().getTime()).toString();
+    }
 
-        this.timeStamp = count;
+    public void setTime(int sec) {
+        timeStamp = sec;
     }
 
     public static Log fromString(String dataString) {
@@ -74,11 +82,14 @@ public class Log {
     @Override
     public String toString() {
         return "Sec: " + timeStamp
+                + ", Timestamp:" + date
                 + ", RPM: " + rpm
                 + ", Km/h: " + kmph
                 + ", On Duty(%)" + onDuty
                 + ", ThV(V): " + throttleVoltage
                 + ", BV(V): " + batteryVoltage
-                + ", BI(A): " + batteryAmp;
+                + ", BI(A): " + batteryAmp
+                + ", Lat: " + lat
+                + ", Lng: " + lng;
     }
 }
